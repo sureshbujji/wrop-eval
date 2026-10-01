@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "n_questions": 120,
+    "per_family": 20,
+    "families": [
+      "op_occlusion",
+      "op_containment",
+      "op_tunnel",
+      "os_barrier",
+      "os_collision",
+      "os_support"
+    ],
+    "seed": 7
+  },
+  "models": {
+    "oracle": {
+      "interface": "continuation",
+      "blurb": "exact ground-truth physics; the ceiling every model is measured against",
+      "by_family": {
+        "op_occlusion": 1.0,
+        "op_containment": 1.0,
+        "op_tunnel": 1.0,
+        "os_barrier": 1.0,
+        "os_collision": 1.0,
+        "os_support": 1.0
+      },
+      "overall_accuracy": 1.0,
+      "n_passed": 120,
+      "elo": 1758.7
+    },
+    "linear-motion": {
+      "interface": "continuation",
+      "blurb": "constant-velocity extrapolation from the last two context frames; blind to walls, gravity, collisions and parenting",
+      "by_family": {
+        "op_occlusion": 1.0,
+        "op_containment": 0.0,
+        "op_tunnel": 1.0,
+        "os_barrier": 0.0,
+        "os_collision": 0.0,
+        "os_support": 0.0
+      },
+      "overall_accuracy": 0.3333333333333333,
+      "n_passed": 40,
+      "elo": 1458.7
+    },
+    "mean-frame": {
+      "interface": "continuation",
+      "blurb": "predicts the temporal mean of all context frames; motion smears into a frozen ghost",
+      "by_family": {
+        "op_occlusion": 0.0,
+        "op_containment": 0.0,
+        "op_tunnel": 0.0,
+        "os_barrier": 0.0,
+        "os_collision": 0.05,
+        "os_support": 0.0
+      },
+      "overall_accuracy": 0.008333333333333333,
+      "n_passed": 1,
+      "elo": 1321.5
+    },
+    "forget-occluded": {
+      "interface": "reference",
+      "blurb": "perfect physics, but drops any object occluded in the last context frame - the 'vanishes behind the occluder' failure",
+      "by_family": {
+        "op_occlusion": 0.0,
+        "op_containment": 1.0,
+        "op_tunnel": 0.0,
+        "os_barrier": 1.0,
+        "os_collision": 1.0,
+        "os_support": 1.0
+      },
+      "overall_accuracy": 0.6666666666666666,
+      "n_passed": 80,
+      "elo": 1594.6
+    },
+    "copy-last": {
+      "interface": "edit",
+      "blurb": "repeats the last context frame; a minimal edit that continues nothing",
+      "by_family": {
+        "op_occlusion": 0.0,
+        "op_containment": 1.0,
+        "op_tunnel": 0.0,
+        "os_barrier": 0.1,
+        "os_collision": 0.05,
+        "os_support": 0.0
+      },
+      "overall_accuracy": 0.19166666666666668,
+      "n_passed": 23,
+      "elo": 1401.2
+    },
+    "noisy-diffuse": {
+      "interface": "edit",
+      "blurb": "near-perfect physics with seeded +-1 cell jitter and 12% per-object-per-frame dropout",
+      "by_family": {
+        "op_occlusion": 0.7,
+        "op_containment": 0.25,
+        "op_tunnel": 0.7,
+        "os_barrier": 0.0,
+        "os_collision": 0.35,
+        "os_support": 0.1
+      },
+      "overall_accuracy": 0.35,
+      "n_passed": 42,
+      "elo": 1465.4
+    }
+  },
+  "violation_counts": {
+    "linear-motion": {
+      "op_containment:misplaced": 142,
+      "os_barrier:interpenetration": 51,
+      "os_barrier:misplaced": 44,
+      "os_collision:misplaced": 130,
+      "os_collision:interpenetration": 47,
+      "os_support:interpenetration": 40,
+      "os_support:misplaced": 20
+    },
+    "mean-frame": {
+      "op_occlusion:teleport": 25,
+      "op_occlusion:misplaced": 55,
+      "op_containment:misplaced": 160,
+      "op_tunnel:teleport": 26,
+      "op_tunnel:misplaced": 54,
+      "os_barrier:teleport": 20,
+      "os_barrier:misplaced": 60,
+      "os_collision:misplaced": 62,
+      "os_support:misplaced": 80
+    },
+    "forget-occluded": {
+      "op_occlusion:vanished": 80,
+      "op_tunnel:vanished": 80
+    },
+    "copy-last": {
+      "op_occlusion:misplaced": 80,
+      "op_tunnel:misplaced": 80,
+      "os_barrier:misplaced": 72,
+      "os_collision:misplaced": 76,
+      "os_support:misplaced": 80
+    },
+    "noisy-diffuse": {
+      "op_occlusion:vanished": 7,
+      "op_containment:vanished": 22,
+      "op_tunnel:vanished": 7,
+      "os_barrier:interpenetration": 35,
+      "os_barrier:vanished": 9,
+      "os_collision:vanished": 15,
+      "os_collision:interpenetration": 4,
+      "os_support:interpenetration": 29,
+      "os_support:vanished": 6
+    }
+  }
+}

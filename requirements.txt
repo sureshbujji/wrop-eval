@@ -1,0 +1,1 @@
+pytest  # test runner; the wrop_eval package itself is stdlib-only
